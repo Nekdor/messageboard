@@ -1,0 +1,24 @@
+<!--  наследуемся от шаблона default.html, который мы создавали для flatpages -->
+{% extends 'flatpages/default.html' %}
+
+<!-- Название у нас будет Message -->
+{% block title %}
+Message
+{% endblock title %}
+
+<!-- В контенте на странице мы выводим саму публикацию, идентификатор которой был передан в url -->
+{% block content %}
+<h1>{{ message.title }}</h1>
+<h3>{{ message.category }}</h3>
+<h5> Опубликовано {{ message.post_time }} пользователем {{ message.author.username }} </h5>
+<p>{{ message.content | safe }}</p>
+{% if message.author == request.user %}
+<button> <a href = {% url 'message_update' message.id %}> Редактировать объявление </a> <br> </button>
+<button> <a href = {% url 'message_delete' message.id %}> Удалить объявление </a> <br> </button>
+{% elif request.user.username %}
+<button> <a href = {% url 'reply' message.id %}> Оставить отклик </a> <br> </button>
+{% else%}
+<p>Зарегистрируйтесь или войдите в аккаунт, чтобы отвечать на объявления</p>
+{% endif %}
+
+{% endblock content %}

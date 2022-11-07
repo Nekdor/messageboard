@@ -1,0 +1,53 @@
+<!--  наследуемся от шаблона default.html, который мы создавали для flatpages -->
+{% extends 'paginated.html' %}
+
+
+<!-- Название у нас будет messages -->
+{% block title %}
+Replies
+{% endblock title %}
+
+
+<!-- В контенте на странице мы выводим все публикации -->
+{% block main_content %}
+    <h1>Добро пожаловать, {{request.user.username}}!</h1>
+
+    <form action="" method="get">
+    {# Переменная, которую мы передали через контекст, может сгенерировать нам форму с полями #}
+    {{ filterset.form.as_p }}
+    {# Добавим кнопку отправки данных формы #}
+    <input type="submit" value="Найти" />
+    {% if replies %}
+        <h4> Отклики на твои объявления: </h4>
+        <table>
+            <tr>
+                <td>Объявление</td>
+                <td>Дата публикации</td>
+                <td>Содержание</td>
+                <td>Пользователь</td>
+            </tr>
+
+            {% for reply in replies %}
+            <tr>
+                <td><a href={{ reply.message.pk }}/> {{ reply.message.title }} </a></td>
+                <td>{{ reply.post_time|date:'M d Y' }}</td>
+                <td>{{ reply.text }}</td>
+                <td>{{ reply.author }}</td>
+                <td>
+                    {% if not reply.confirmed %}
+                        <button> <a href={% url 'reply_confirm' reply.id %}> Принять </a> </button>
+                    {% else %} Отклик принят
+                    {% endif %}
+                </td>
+                <td>
+                    &nbsp <button> <a href={% url 'reply_delete' reply.id %}> Удалить </a> </button>
+                </td>
+            </tr>
+            {% endfor %}
+
+        </table>
+   {% else %}
+       <h4>Откликов нет!</h4>
+   {% endif %}
+
+{% endblock main_content %}

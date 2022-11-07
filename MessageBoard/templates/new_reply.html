@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+<p> Здравствуй, {{ reply.message.author.username }}!
+    На твое объявление <a href = {{ link }}> {{reply.message.title}}</a>
+    получен новый отклик. Вот его текст: </p>
+    <p> {{ reply.text }} </p>
+</body>
+</html>

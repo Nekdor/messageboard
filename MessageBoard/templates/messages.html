@@ -1,0 +1,44 @@
+<!--  наследуемся от шаблона default.html, который мы создавали для flatpages -->
+{% extends 'paginated.html' %}
+
+
+<!-- Название у нас будет messages -->
+{% block title %}
+Messages
+{% endblock title %}
+
+
+<!-- В контенте на странице мы выводим все публикации -->
+{% block main_content %}
+    <h1>Поиск объявлений</h1>
+    <form action="" method="get">
+    {# Переменная, которую мы передали через контекст, может сгенерировать нам форму с полями #}
+    {{ filterset.form.as_p }}
+    {# Добавим кнопку отправки данных формы #}
+    <input type="submit" value="Найти" />
+    </form>
+    {% if messages %}
+        <table>
+            <tr>
+                <td>Объявление</td>
+                <td>Дата публикации</td>
+                <td>Категория</td>
+                <td>Автор</td>
+            </tr>
+
+            {% for message in messages %}
+            <tr>
+                <td><a href={{ message.pk }}/> {{ message.title }} </a></td>
+                <td>{{ message.post_time|date:'M d Y' }}</td>
+                <td>{{ message.get_category_display }} </td>
+                <td>{{ message.author.username }} </td>
+
+            </tr>
+            {% endfor %}
+
+        </table>
+   {% else %}
+       <h2>Объявлений нет!</h2>
+   {% endif %}
+
+{% endblock main_content %}
